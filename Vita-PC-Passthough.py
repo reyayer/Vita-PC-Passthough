@@ -34,7 +34,7 @@ class CameraApp(QMainWindow):
         self.overlays = {
             "vita2000": {"file": "vita.png", "rect": (221, 64, 858, 424)},
             "vita1000": {"file": "vita1.png", "rect": (213, 53, 866, 426)},
-            "psp": {"file": "psp.png", "rect": (238, 68, 834, 414)}
+            "psp": {"file": "psp.png", "rect": (238, 68, 845, 414)}
         }
 
         self.current_mic = 0
