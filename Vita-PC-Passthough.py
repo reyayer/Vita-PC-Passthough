@@ -18,6 +18,8 @@ class CameraApp(QMainWindow):
 
         self.setWindowTitle("PSVita")
         self.setGeometry(100, 100, 896, 504)
+        self.resize(896, 504)
+        self.setMinimumSize(320, 240)
         self.setStyleSheet("background-color: black;")
         self.setWindowIcon(QIcon(resource_path("psvita.ico")))
 
@@ -27,6 +29,10 @@ class CameraApp(QMainWindow):
 
         self.cap = None
         self.current_camera = 0
+
+        self.resolutions = [(896, 504), (960, 544), (480, 272)]
+        self.current_res_index = 0
+
         self.start_camera(0)
 
         self.upscaling = False
@@ -50,9 +56,10 @@ class CameraApp(QMainWindow):
             self.cap.release()
         self.cap = cv2.VideoCapture(index, cv2.CAP_DSHOW)
         if self.cap.isOpened():
-            self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 896)
-            self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 504)
-            print(f"Camera {index} started")
+            w, h = self.resolutions[self.current_res_index]
+            self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, w)
+            self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, h)
+            print(f"Camera {index} started at {int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))}x{int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))}")
         else:
             print(f"Failed to open camera {index}")
 
@@ -88,7 +95,10 @@ class CameraApp(QMainWindow):
                 self.cap = new_cap
                 self.current_camera = cam_index
                 self.overlay_mode = None
-                print(f"Switched to camera {cam_index}")
+                w, h = self.resolutions[self.current_res_index]
+                self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, w)
+                self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, h)
+                print(f"Switched to camera {cam_index} at {int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))}x{int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))}")
             else:
                 print(f"Camera {cam_index} not available")
 
@@ -111,6 +121,20 @@ class CameraApp(QMainWindow):
             self.toggle_overlay("vita1000")
         elif key == Qt.Key_Equal:
             self.toggle_overlay("psp")
+
+        elif key == Qt.Key_BracketLeft:  # [
+            self.current_res_index = (self.current_res_index - 1) % len(self.resolutions)
+            w, h = self.resolutions[self.current_res_index]
+            self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, w)
+            self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, h)
+            print(f"Resolution set to {int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))}x{int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))}")
+
+        elif key == Qt.Key_BracketRight:  # ]
+            self.current_res_index = (self.current_res_index + 1) % len(self.resolutions)
+            w, h = self.resolutions[self.current_res_index]
+            self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, w)
+            self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, h)
+            print(f"Resolution set to {int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))}x{int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))}")
 
         super().keyPressEvent(event)
 
