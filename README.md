@@ -13,3 +13,5 @@ Controls
 `- PSVita 1000 Overlay`
 
 `= PSP Overlay`
+
+`[-] Change reolution between 896x504, 960x544, and 480x272`
