@@ -122,21 +122,30 @@ class CameraApp(QMainWindow):
         elif key == Qt.Key_Equal:
             self.toggle_overlay("psp")
 
-        elif key == Qt.Key_BracketLeft:  # [
+        elif key == Qt.Key_BracketLeft:  
             self.current_res_index = (self.current_res_index - 1) % len(self.resolutions)
             w, h = self.resolutions[self.current_res_index]
             self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, w)
             self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, h)
             print(f"Resolution set to {int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))}x{int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))}")
 
-        elif key == Qt.Key_BracketRight:  # ]
+        elif key == Qt.Key_BracketRight:  
             self.current_res_index = (self.current_res_index + 1) % len(self.resolutions)
             w, h = self.resolutions[self.current_res_index]
             self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, w)
             self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, h)
             print(f"Resolution set to {int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))}x{int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))}")
 
+        elif key == Qt.Key_F11:  
+            if self.isFullScreen():
+                self.showNormal()
+                print("Exited fullscreen")
+            else:
+                self.showFullScreen()
+                print("Entered fullscreen")
+
         super().keyPressEvent(event)
+
 
     def toggle_overlay(self, mode):
         if self.overlay_mode == mode:

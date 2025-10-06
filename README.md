@@ -15,3 +15,5 @@ Controls
 `= PSP Overlay`
 
 `[-] Change reolution between 896x504, 960x544, and 480x272`
+
+`F11 to toggle fullscreen`
